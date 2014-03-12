@@ -30,6 +30,8 @@ public class Project2{
             		System.out.print("well Done");
             	break;
             case 7:  	
+            	if(validateArgument((args), 6))	
+            		System.out.print("well Done");
             	break;
         }
 		
@@ -91,7 +93,15 @@ public class Project2{
         		}	
             	break;
             case 6:  	
-            	String pattern6
+            	String pattern6 = "[0-9]{1,2}"
+            	for(int i = 0; 1 < part.length; i++)
+            	{
+            		if(!(part[i].matches(pattern6)))
+            			validArg = false;
+            		else if(part[i] < 1 || part[i] > 45)
+            			validArg = false;
+        		}
+        		System.out.print("You must only input number's between 1 and 45");		 
            	 	break;
             case 7:  	
             	break;
