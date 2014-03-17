@@ -1,7 +1,8 @@
 import java.util.*;
 import java.io.*;
 public class Project2{
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException
+	{
 		if (args.length < 1 || args.length > 7)
 			System.out.print("Error: You must supply between 1-7 arguments");
 		switch (args.length) {
@@ -15,15 +16,15 @@ public class Project2{
              else if(validateArgument((args), 1))
              {
              if(args[0].equals("1") || args[0].equals("2"))	
-             System.out.print("well Done");
+				Frequency(args);	
              else
-             System.out.print("well Done");
+				System.out.print("well Done");
              }
         
              break;
             case 2:  	
             	if(validateArgument((args), 1) && validateArgument((args), 2))	
-            		System.out.print("well Done");
+            		Frequency(args);
            		break;
             case 3:  
             	if(validateArgument((args), 1) && validateArgument((args), 2) && validateArgument((args), 3))	
@@ -35,7 +36,7 @@ public class Project2{
             	break;
             case 5:  	
             	if(validateArgument((args), 1) && validateArgument((args), 2) && validateArgument((args), 3) && validateArgument((args), 5))	
-            		rangeAnalysis(args);
+            		System.out.print("well Done");
             	break;
             case 6:  	
             	if(validateArgument((args), 6))	
@@ -55,23 +56,30 @@ public class Project2{
 		boolean validArg = true;;
 		switch (option) {
             case 1:  	
-            	String pattern = "[1|2|3|4]";
+            	String pattern = "[1|2]";
+				if(part.length == 1)
+				{
+					pattern = "[1|2|3|4]";
+				}
             	if(!(part[0].matches(pattern)))
             	{
-            		System.out.print("The first argument must be either 1 2 3 or 4 or a four digit year");
             		validArg = false;
+					if(part.length == 1)
+						System.out.print("The first argument must be either 1 2 3 or 4 or a four digit year");
+					else
+						System.out.print("In the case that more than one argument is supplied, the first argument must be either 1 or 2");
         		}
             	break;
             case 2:  
             	String pattern2 = "[a-zA-Z0-9]+";
             	if(!(part[1].matches(pattern2)))
             	{
-            		System.out.print("The second argument must be one of the following: A R S LP1 LP2");
+            		System.out.print("The second argument must be one of the following: A R S L1 L2");
             		validArg = false;
         		}	
-        		else if(!(part[1].equals("A") || part[1].equals("R") || part[1].equals("S") || part[1].equals("LP1") || part[1].equals("LP2")))
+        		else if(!(part[1].equals("A") || part[1].equals("R") || part[1].equals("S") || part[1].equals("L1") || part[1].equals("L2")))
         		{
-	        		System.out.print("The second argument must be one of the following: A R S LP1 LP2");
+	        		System.out.print("The second argument must be one of the following: A R S L1 L2");
             		validArg = false;
         		}
             	break;
@@ -124,9 +132,48 @@ public class Project2{
              System.out.print("The first argument must be either 1 2 3 or 4 or a four digit year");
              validArg = false;  	
             
+			}
+		
+		}
+		return validArg;
 	}
-	return validArg;
-}
+	public static void Frequency(String [] args) throws FileNotFoundException{
+	int max = 7;
+	if(Integer.parseInt(args[0]) == 2)
+		max = 8;
+	String criteria = "";
+	if(args.length == 1)
+		criteria = "A";
+	else
+		criteria = args[1];
+	System.out.println(criteria);
+	boolean doCriteria = true;
+	int [] numArray = new int[45];
+	String [] fileItem;
+	File inputFile = new File("sampleLottoData.txt");
+	if(inputFile.exists())
+	{
+		
+		Scanner fileReader = new Scanner(inputFile);
+		while(fileReader.hasNext())
+		{
+			doCriteria = true;
+			fileItem = (fileReader.nextLine()).split(",");
+			if((!(criteria.equalsIgnoreCase("A"))) && (!(fileItem[8].equalsIgnoreCase(criteria))))
+			{	
+				doCriteria = false;
+			}
+			if(doCriteria)
+			{
+				for(int i = 1; i < max; i++)
+					numArray[(Integer.parseInt(fileItem[i]))-1]++;
+			}
+		}
+		fileReader.close();
+		for(int i = 0; i < numArray.length; i++)
+			System.out.println("The number " + (i + 1) + " occurred " + numArray[i] + " times.");
+	}
+	}
 	public static File openFile(String fileName){
 		/*
 			Returns a File object if the desired file exists in the current directory.
